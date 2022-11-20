@@ -1,10 +1,15 @@
-[![Dart CI](https://github.com/dart-lang/oauth2/actions/workflows/test-package.yml/badge.svg)](https://github.com/dart-lang/oauth2/actions/workflows/test-package.yml)
-[![pub package](https://img.shields.io/pub/v/oauth2.svg)](https://pub.dev/packages/oauth2)
-[![package publisher](https://img.shields.io/pub/publisher/oauth2.svg)](https://pub.dev/packages/oauth2/publisher)
+[![Dart CI](https://github.com/Bdaya-Dev/bdaya_oauth2/actions/workflows/test-package.yml/badge.svg)](https://github.com/Bdaya-Dev/bdaya_oauth2/actions/workflows/test-package.yml)
+[![pub package](https://img.shields.io/pub/v/bdaya_oauth2.svg)](https://pub.dev/packages/bdaya_oauth2)
+[![package publisher](https://img.shields.io/pub/publisher/bdaya_oauth2.svg)](https://pub.dev/packages/bdaya_oauth2/publisher)
 
 A client library for authenticating with a remote service via OAuth2 on behalf
 of a user, and making authorized HTTP requests with the user's OAuth2
 credentials.
+# Notice
+
+This repo was forked from the original package `oauth2` in case of deprecations
+github: https://github.com/dart-lang/oauth2
+pub.dev: https://pub.dev/packages/oauth2
 
 ## About OAuth2
 
@@ -31,7 +36,7 @@ more may be added in the future.
 ```dart
 import 'dart:io';
 
-import 'package:oauth2/oauth2.dart' as oauth2;
+import 'package:bdaya_oauth2/bdaya_oauth2.dart' as oauth2;
 
 // These URLs are endpoints that are provided by the authorization
 // server. They're usually included in the server's documentation of its
@@ -247,13 +252,13 @@ File('~/.myapp/credentials.json').writeAsString(client.credentials.toJson());
 ```
 
 [authorizationCodeGrantDocs]: https://oauth.net/2/grant-types/authorization-code/
-[authorizationCodeGrantMethod]: https://pub.dev/documentation/oauth2/latest/oauth2/AuthorizationCodeGrant-class.html
+[authorizationCodeGrantMethod]: https://pub.dev/documentation/bdaya_oauth2/latest/bdaya_oauth2/AuthorizationCodeGrant-class.html
 [authorizationCodeGrantSection]: #authorization-code-grant
 [clientCredentialsGrantDocs]: https://oauth.net/2/grant-types/client-credentials/
-[clientCredentialsGrantMethod]: https://pub.dev/documentation/oauth2/latest/oauth2/clientCredentialsGrant.html
+[clientCredentialsGrantMethod]: https://pub.dev/documentation/bdaya_oauth2/latest/bdaya_oauth2/clientCredentialsGrant.html
 [clientCredentialsGrantSection]: #client-credentials-grant
 [resourceOwnerPasswordGrantDocs]: https://oauth.net/2/grant-types/password/
-[resourceOwnerPasswordGrantMethod]: https://pub.dev/documentation/oauth2/latest/oauth2/resourceOwnerPasswordGrant.html
+[resourceOwnerPasswordGrantMethod]: https://pub.dev/documentation/bdaya_oauth2/latest/bdaya_oauth2/resourceOwnerPasswordGrant.html
 [resourceOwnerPasswordGrantSection]: #resource-owner-password-grant
 [uni_links]: https://pub.dev/packages/uni_links
 [url_launcher]: https://pub.dev/packages/url_launcher

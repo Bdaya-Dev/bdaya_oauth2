@@ -7,7 +7,7 @@ import 'dart:collection' show Queue;
 
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:oauth2/oauth2.dart' as oauth2;
+import 'package:bdaya_oauth2/bdaya_oauth2.dart' as oauth2;
 import 'package:test/test.dart';
 
 class ExpectClient extends MockClient {
@@ -41,9 +41,7 @@ class ExpectClient extends MockClient {
 }
 
 /// A matcher for functions that throw AuthorizationException.
-final Matcher throwsAuthorizationException =
-    throwsA(const TypeMatcher<oauth2.AuthorizationException>());
+final Matcher throwsAuthorizationException = throwsA(const TypeMatcher<oauth2.AuthorizationException>());
 
 /// A matcher for functions that throw ExpirationException.
-final Matcher throwsExpirationException =
-    throwsA(const TypeMatcher<oauth2.ExpirationException>());
+final Matcher throwsExpirationException = throwsA(const TypeMatcher<oauth2.ExpirationException>());

@@ -1,13 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:oauth2/oauth2.dart' as oauth2;
+import 'package:bdaya_oauth2/bdaya_oauth2.dart' as oauth2;
 
 // These URLs are endpoints that are provided by the authorization
 // server. They're usually included in the server's documentation of its
 // OAuth2 API.
-final authorizationEndpoint =
-    Uri.parse('http://example.com/oauth2/authorization');
+final authorizationEndpoint = Uri.parse('http://example.com/oauth2/authorization');
 final tokenEndpoint = Uri.parse('http://example.com/oauth2/token');
 
 // The authorization server will issue each client a separate client
@@ -42,16 +41,13 @@ Future<oauth2.Client> createClient() async {
   // If the OAuth2 credentials have already been saved from a previous run, we
   // just want to reload them.
   if (exists) {
-    var credentials =
-        oauth2.Credentials.fromJson(await credentialsFile.readAsString());
+    var credentials = oauth2.Credentials.fromJson(await credentialsFile.readAsString());
     return oauth2.Client(credentials, identifier: identifier, secret: secret);
   }
 
   // If we don't have OAuth2 credentials yet, we need to get the resource owner
   // to authorize us. We're assuming here that we're a command-line application.
-  var grant = oauth2.AuthorizationCodeGrant(
-      identifier, authorizationEndpoint, tokenEndpoint,
-      secret: secret);
+  var grant = oauth2.AuthorizationCodeGrant(identifier, authorizationEndpoint, tokenEndpoint, secret: secret);
 
   // A URL on the authorization server (authorizationEndpoint with some
   // additional query parameters). Scopes and state can optionally be passed

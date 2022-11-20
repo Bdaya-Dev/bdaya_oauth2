@@ -5,9 +5,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:oauth2/oauth2.dart' as oauth2;
-import 'package:oauth2/src/handle_access_token_response.dart';
-import 'package:oauth2/src/parameters.dart';
+import 'package:bdaya_oauth2/bdaya_oauth2.dart' as oauth2;
+import 'package:bdaya_oauth2/src/handle_access_token_response.dart';
+import 'package:bdaya_oauth2/src/parameters.dart';
 import 'package:test/test.dart';
 
 import 'utils.dart';
@@ -16,20 +16,15 @@ final Uri tokenEndpoint = Uri.parse('https://example.com/token');
 
 final DateTime startTime = DateTime.now();
 
-oauth2.Credentials handle(http.Response response,
-        {GetParameters? getParameters}) =>
-    handleAccessTokenResponse(
-        response, tokenEndpoint, startTime, ['scope'], ' ',
-        getParameters: getParameters);
+oauth2.Credentials handle(http.Response response, {GetParameters? getParameters}) =>
+    handleAccessTokenResponse(response, tokenEndpoint, startTime, ['scope'], ' ', getParameters: getParameters);
 
 void main() {
   group('an error response', () {
     oauth2.Credentials handleError(
             {String body = '{"error": "invalid_request"}',
             int statusCode = 400,
-            Map<String, String> headers = const {
-              'content-type': 'application/json'
-            }}) =>
+            Map<String, String> headers = const {'content-type': 'application/json'}}) =>
         handle(http.Response(body, statusCode, headers: headers));
 
     test('causes an AuthorizationException', () {
@@ -49,23 +44,17 @@ void main() {
     });
 
     test('with a non-JSON content-type causes a FormatException', () {
-      expect(() => handleError(headers: {'content-type': 'text/plain'}),
-          throwsFormatException);
+      expect(() => handleError(headers: {'content-type': 'text/plain'}), throwsFormatException);
     });
 
-    test('with a non-JSON, non-plain content-type causes a FormatException',
-        () {
-      expect(() => handleError(headers: {'content-type': 'image/png'}),
-          throwsFormatException);
+    test('with a non-JSON, non-plain content-type causes a FormatException', () {
+      expect(() => handleError(headers: {'content-type': 'image/png'}), throwsFormatException);
     });
 
     test(
         'with a JSON content-type and charset causes an '
         'AuthorizationException', () {
-      expect(
-          () => handleError(
-              headers: {'content-type': 'application/json; charset=UTF-8'}),
-          throwsAuthorizationException);
+      expect(() => handleError(headers: {'content-type': 'application/json; charset=UTF-8'}), throwsAuthorizationException);
     });
 
     test('with invalid JSON causes a FormatException', () {
@@ -77,57 +66,28 @@ void main() {
     });
 
     test('with a non-string error_description causes a FormatException', () {
-      expect(
-          () => handleError(
-              body: jsonEncode(
-                  {'error': 'invalid_request', 'error_description': 12})),
-          throwsFormatException);
+      expect(() => handleError(body: jsonEncode({'error': 'invalid_request', 'error_description': 12})), throwsFormatException);
     });
 
     test('with a non-string error_uri causes a FormatException', () {
-      expect(
-          () => handleError(
-              body: jsonEncode({'error': 'invalid_request', 'error_uri': 12})),
-          throwsFormatException);
+      expect(() => handleError(body: jsonEncode({'error': 'invalid_request', 'error_uri': 12})), throwsFormatException);
     });
 
     test('with a string error_description causes a AuthorizationException', () {
-      expect(
-          () => handleError(
-                  body: jsonEncode({
-                'error': 'invalid_request',
-                'error_description': 'description'
-              })),
-          throwsAuthorizationException);
+      expect(() => handleError(body: jsonEncode({'error': 'invalid_request', 'error_description': 'description'})), throwsAuthorizationException);
     });
 
     test('with a string error_uri causes a AuthorizationException', () {
       expect(
-          () => handleError(
-                  body: jsonEncode({
-                'error': 'invalid_request',
-                'error_uri': 'http://example.com/error'
-              })),
-          throwsAuthorizationException);
+          () => handleError(body: jsonEncode({'error': 'invalid_request', 'error_uri': 'http://example.com/error'})), throwsAuthorizationException);
     });
   });
 
   group('a success response', () {
     oauth2.Credentials handleSuccess(
-        {String contentType = 'application/json',
-        accessToken = 'access token',
-        tokenType = 'bearer',
-        expiresIn,
-        refreshToken,
-        scope}) {
+        {String contentType = 'application/json', accessToken = 'access token', tokenType = 'bearer', expiresIn, refreshToken, scope}) {
       return handle(http.Response(
-          jsonEncode({
-            'access_token': accessToken,
-            'token_type': tokenType,
-            'expires_in': expiresIn,
-            'refresh_token': refreshToken,
-            'scope': scope
-          }),
+          jsonEncode({'access_token': accessToken, 'token_type': tokenType, 'expires_in': expiresIn, 'refresh_token': refreshToken, 'scope': scope}),
           200,
           headers: {'content-type': contentType}));
     }
@@ -135,8 +95,7 @@ void main() {
     test('returns the correct credentials', () {
       var credentials = handleSuccess();
       expect(credentials.accessToken, equals('access token'));
-      expect(credentials.tokenEndpoint.toString(),
-          equals(tokenEndpoint.toString()));
+      expect(credentials.tokenEndpoint.toString(), equals(tokenEndpoint.toString()));
     });
 
     test('with no content-type causes a FormatException', () {
@@ -144,15 +103,13 @@ void main() {
     });
 
     test('with a non-JSON content-type causes a FormatException', () {
-      expect(() => handleSuccess(contentType: 'text/plain'),
-          throwsFormatException);
+      expect(() => handleSuccess(contentType: 'text/plain'), throwsFormatException);
     });
 
     test(
         'with a JSON content-type and charset returns the correct '
         'credentials', () {
-      var credentials =
-          handleSuccess(contentType: 'application/json; charset=UTF-8');
+      var credentials = handleSuccess(contentType: 'application/json; charset=UTF-8');
       expect(credentials.accessToken, equals('access token'));
     });
 
@@ -162,22 +119,16 @@ void main() {
     });
 
     test('with custom getParameters() returns the correct credentials', () {
-      var body = '_${jsonEncode({
-            'token_type': 'bearer',
-            'access_token': 'access token'
-          })}';
+      var body = '_${jsonEncode({'token_type': 'bearer', 'access_token': 'access token'})}';
       var credentials = handle(
         http.Response(body, 200, headers: {'content-type': 'text/plain'}),
-        getParameters: (contentType, body) =>
-            jsonDecode(body.substring(1)) as Map<String, dynamic>,
+        getParameters: (contentType, body) => jsonDecode(body.substring(1)) as Map<String, dynamic>,
       );
       expect(credentials.accessToken, equals('access token'));
-      expect(credentials.tokenEndpoint.toString(),
-          equals(tokenEndpoint.toString()));
+      expect(credentials.tokenEndpoint.toString(), equals(tokenEndpoint.toString()));
     });
 
-    test('throws a FormatException if custom getParameters rejects response',
-        () {
+    test('throws a FormatException if custom getParameters rejects response', () {
       var response = http.Response(
           jsonEncode({
             'access_token': 'access token',
@@ -189,10 +140,7 @@ void main() {
           200,
           headers: {'content-type': 'foo/bar'});
 
-      expect(
-          () => handle(response,
-              getParameters: (contentType, body) => throw FormatException(
-                  'unsupported content-type: $contentType')),
+      expect(() => handle(response, getParameters: (contentType, body) => throw FormatException('unsupported content-type: $contentType')),
           throwsFormatException);
     });
 
@@ -224,14 +172,12 @@ void main() {
         'with expires-in sets the expiration to ten seconds earlier than the '
         'server says', () {
       var credentials = handleSuccess(expiresIn: 100);
-      expect(credentials.expiration?.millisecondsSinceEpoch,
-          startTime.millisecondsSinceEpoch + 90 * 1000);
+      expect(credentials.expiration?.millisecondsSinceEpoch, startTime.millisecondsSinceEpoch + 90 * 1000);
     });
 
     test('with expires-in encoded as string', () {
       var credentials = handleSuccess(expiresIn: '110');
-      expect(credentials.expiration?.millisecondsSinceEpoch,
-          startTime.millisecondsSinceEpoch + 100 * 1000);
+      expect(credentials.expiration?.millisecondsSinceEpoch, startTime.millisecondsSinceEpoch + 100 * 1000);
     });
 
     test('with a non-string refresh token throws a FormatException', () {
@@ -254,38 +200,19 @@ void main() {
 
     test('with a custom scope delimiter sets the scopes', () {
       var response = http.Response(
-          jsonEncode({
-            'access_token': 'access token',
-            'token_type': 'bearer',
-            'expires_in': null,
-            'refresh_token': null,
-            'scope': 'scope1,scope2'
-          }),
+          jsonEncode({'access_token': 'access token', 'token_type': 'bearer', 'expires_in': null, 'refresh_token': null, 'scope': 'scope1,scope2'}),
           200,
           headers: {'content-type': 'application/json'});
-      var credentials = handleAccessTokenResponse(
-          response, tokenEndpoint, startTime, ['scope'], ',');
+      var credentials = handleAccessTokenResponse(response, tokenEndpoint, startTime, ['scope'], ',');
       expect(credentials.scopes, equals(['scope1', 'scope2']));
     });
   });
 
   group('a success response with a id_token', () {
     oauth2.Credentials handleSuccess(
-        {String contentType = 'application/json',
-        accessToken = 'access token',
-        tokenType = 'bearer',
-        expiresIn,
-        idToken = 'decode me',
-        scope}) {
+        {String contentType = 'application/json', accessToken = 'access token', tokenType = 'bearer', expiresIn, idToken = 'decode me', scope}) {
       return handle(http.Response(
-          jsonEncode({
-            'access_token': accessToken,
-            'token_type': tokenType,
-            'expires_in': expiresIn,
-            'id_token': idToken,
-            'scope': scope
-          }),
-          200,
+          jsonEncode({'access_token': accessToken, 'token_type': tokenType, 'expires_in': expiresIn, 'id_token': idToken, 'scope': scope}), 200,
           headers: {'content-type': contentType}));
     }
 
